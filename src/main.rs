@@ -3,7 +3,7 @@ mod ppmimage;
 
 type Position = (u32, u32);
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
 struct Target {
   position: Position,
   colour: u32
@@ -19,7 +19,7 @@ fn euclidean_distance(pos_a: Position, pos_b: Position) -> f32 {
   ((pos_a.0 as f32 - pos_b.0 as f32).powf(2.0) + (pos_a.1 as f32 - pos_b.1 as f32).powf(2.0)).sqrt()
 }
 
-fn find_closest_target(position: Position, targets: &Vec<Target>) -> &Target {
+fn find_closest_target(position: Position, targets: &Vec<Target>) -> Target {
   let mut result: Target = Target::new((0, 0), 0x000000FF);
   let mut closest_distance: f32 = std::f32::MAX;
 
@@ -30,7 +30,7 @@ fn find_closest_target(position: Position, targets: &Vec<Target>) -> &Target {
       
       if euclidean_distance < closest_distance {
         closest_distance = euclidean_distance;
-        result = target
+        result = *target;
       }
     });
 
